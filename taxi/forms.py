@@ -1,8 +1,8 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.core.exceptions import ValidationError
 
-from taxi.models import Driver, Car
+from taxi.models import Car, Driver
 
 
 class CarForm(forms.ModelForm):

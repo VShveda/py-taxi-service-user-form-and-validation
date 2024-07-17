@@ -1,12 +1,26 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import (
+    HttpRequest,
+    HttpResponse
+)
+from django.shortcuts import (
+    render,
+    get_object_or_404
+)
 from django.urls import reverse_lazy
 from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Driver, Car, Manufacturer
-from .forms import DriverLicenseUpdateForm, DriverCreationForm, CarForm
+from taxi.forms import (
+    CarForm,
+    DriverCreationForm,
+    DriverLicenseUpdateForm
+)
+from taxi.models import (
+    Car,
+    Driver,
+    Manufacturer
+)
 
 
 @login_required
@@ -107,7 +121,7 @@ class DriverUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 
 def car_assign_driver(request: HttpRequest, pk: int) -> HttpResponse:
-    car = Car.objects.get(id=pk)
+    car = get_object_or_404(Car, id=pk)
     car.drivers.add(request.user)
     context = {
         "car": car
@@ -116,7 +130,7 @@ def car_assign_driver(request: HttpRequest, pk: int) -> HttpResponse:
 
 
 def car_delete_driver(request: HttpRequest, pk: int) -> HttpResponse:
-    car = Car.objects.get(id=pk)
+    car = get_object_or_404(Car, id=pk)
     car.drivers.remove(request.user)
     context = {
         "car": car
